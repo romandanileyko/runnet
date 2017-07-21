@@ -40,8 +40,7 @@ public class SecureController {
     private IpDetailDao ipDetailDao;
     @Autowired
     private HostelDao hostelDao;
-    @Autowired
-    private ResultDao resultDao;
+
 
     @RequestMapping(value = "/test")
     public @ResponseBody
@@ -53,15 +52,7 @@ public class SecureController {
         listRanges.stream().forEach(p->System.out.println(p));
         return list;
     }
-    @RequestMapping(value = "/free-ip")
-    public @ResponseBody String getReportOfFreeIp(){
-        List<ResultCountOfFreeIp> freeIps = resultDao.getFreeIpCount();
 
-        Gson objGson = new Gson();
-        String json = objGson.toJson(freeIps);
-        System.out.println("JSON: "+ json);
-        return json;
-    }
     @RequestMapping(value = {"/admin","/logout","/home"})
     public String redirectToIndex(){
         return "forward:/index.html";
