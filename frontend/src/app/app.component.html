@@ -1,3 +1,12 @@
-<h1>
-  {{title}}
-</h1>
+<form  *ngIf="auth.loggedIn()">
+  <button (click)="logout()">logout</button>
+</form>
+<div>
+  <nav *ngIf="auth.loggedIn()">
+    <a routerLink="">Главная</a>
+    <a routerLink="/test">Тест</a>
+    <a routerLink="/about">About</a>
+    <a routerLink="/free-ip">freeip</a>
+  </nav>
+  <router-outlet></router-outlet>
+</div>

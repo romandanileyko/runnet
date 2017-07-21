@@ -1,0 +1,7 @@
+<form #f="ngForm" (ngSubmit)="onLogin(f.value)" *ngIf="!auth.loggedIn()">
+  <input type="text" placeholder="username" name="username" ngModel>
+  <input type="password" placeholder="password" name="password" ngModel>
+  <button type="submit">login</button>
+  <button (click)="logout()">logout</button>
+  {{auth.loggedIn()}}
+</form>
