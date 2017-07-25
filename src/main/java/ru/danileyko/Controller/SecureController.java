@@ -48,8 +48,6 @@ public class SecureController {
         list.add("Test.");
         String loggedUser = getPrincipal();
         System.out.println("loggedUser is: "+loggedUser);
-        List<IpRange> listRanges = ipRangeDao.getAllRanges();
-        listRanges.stream().forEach(p->System.out.println(p));
         return list;
     }
 

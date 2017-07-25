@@ -8,15 +8,16 @@ import {LoginComponent} from "./login.component";
 import {LoginService} from "./LoginService";
 import {RouterModule, Routes} from "@angular/router";
 import {AboutComponent} from "./about.component";
-import {ReportComponent} from "./ReportComponent";
+import {DashBoardComponent} from "./dashboard.component";
 import {AuthGuard} from "./AuthGuard";
 import {FreeIpComponent} from "./freeIp.component";
 import {FreeIpService} from "./freeIp.service";
+import {DashBoard} from "./dashboard.service";
 
 const appRoutes: Routes =[
   {path:'',component:LoginComponent},
   {path:'login',component:LoginComponent},
-  {path:'test',component:ReportComponent,canActivate:[AuthGuard]},
+  {path:'test',component:DashBoardComponent,canActivate:[AuthGuard]},
   {path:'about',component:AboutComponent},
   {path:'free-ip',component:FreeIpComponent}
 ];
@@ -25,7 +26,7 @@ const appRoutes: Routes =[
   declarations: [
     AppComponent,
     LoginComponent,
-    ReportComponent,
+    DashBoardComponent,
     AboutComponent,
     FreeIpComponent
   ],
@@ -35,7 +36,7 @@ const appRoutes: Routes =[
     HttpModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [LoginService,AuthGuard,FreeIpService],
+  providers: [LoginService,AuthGuard,FreeIpService,DashBoard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

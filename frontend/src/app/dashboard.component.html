@@ -1,0 +1,17 @@
+<div>Активных пользователей:{{activeClientCount}}</div>
+<div>
+  <table  class="table table-striped">
+    <thead>
+    <tr>
+      <th>Имя</th>
+      <th>Колличество</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of countClient">
+      <td>{{item.nameOfHostel}}  </td>
+      <td>{{item.countClient}} </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
