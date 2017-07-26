@@ -18,6 +18,11 @@ export class DashBoardComponent implements OnInit{
   text: string;
   countClient: any;
   activeClientCount: any;
+  lastRegistered: any;
+  hosteNum: number;
+  dayCount: number;
+
+  hostelsList = [1,2,3,5,6,7,10,11,12,13,14,15,16,17,19,20];
 
   constructor(private auth:Http,private http:DashBoard){}
 
@@ -31,6 +36,12 @@ export class DashBoardComponent implements OnInit{
         data => this.text= data,
         error => console.log(error)
       );
+  }
+
+  getLastRegistered(hostelNum,dayCount){
+    this.http.getLastRegistered(hostelNum,dayCount).subscribe(reponse => {this.lastRegistered = reponse},
+        err => console.log(err),
+        () => console.log(this.lastRegistered))
   }
 
   ngOnInit(){

@@ -19,5 +19,12 @@ export class DashBoard{
     let options = new RequestOptions({headers:headers});
     return this.http.get('/count-client',options).map(res=>res.json())
   }
+
+  getLastRegistered(hostelNum,dayCount){
+    let headers = new Headers({'Authorization':'' + localStorage.getItem('Authorization')});
+    let options = new RequestOptions({headers:headers});
+    return this.http.get('/last-registered?hostelNum='+hostelNum+'&dayCount='+dayCount,options)
+      .map(res => res.json())
+  }
 }
 

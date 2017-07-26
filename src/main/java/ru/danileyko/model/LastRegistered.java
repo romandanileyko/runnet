@@ -10,6 +10,7 @@ public class LastRegistered {
     private String hostelName;
     private String mac;
     private Date date;
+    private String ip;
 
     public String getPuser() {
         return puser;
@@ -50,6 +51,4 @@ public class LastRegistered {
     public void setIp(String ip) {
         this.ip = ip;
     }
-
-    private String ip;
 }

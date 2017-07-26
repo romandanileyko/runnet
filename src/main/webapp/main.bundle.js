@@ -7,7 +7,7 @@ webpackJsonp([1,4],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(214);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(674);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(675);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -97,6 +97,12 @@ var DashBoard = (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'Authorization': '' + localStorage.getItem('Authorization') });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* RequestOptions */]({ headers: headers });
         return this.http.get('/count-client', options).map(function (res) { return res.json(); });
+    };
+    DashBoard.prototype.getLastRegistered = function (hostelNum, dayCount) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["b" /* Headers */]({ 'Authorization': '' + localStorage.getItem('Authorization') });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["c" /* RequestOptions */]({ headers: headers });
+        return this.http.get('/last-registered?hostelNum=' + hostelNum + '&dayCount=' + dayCount, options)
+            .map(function (res) { return res.json(); });
     };
     DashBoard = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["c" /* Injectable */])(), 
@@ -303,7 +309,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
             selector: 'app-root',
-            template: __webpack_require__(667),
+            template: __webpack_require__(668),
             styles: [__webpack_require__(666)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__LoginService__["a" /* LoginService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__LoginService__["a" /* LoginService */]) === 'function' && _a) || Object])
@@ -421,6 +427,7 @@ var DashBoardComponent = (function () {
     function DashBoardComponent(auth, http) {
         this.auth = auth;
         this.http = http;
+        this.hostelsList = [1, 2, 3, 5, 6, 7, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20];
     }
     DashBoardComponent.prototype.getSecure = function () {
         var _this = this;
@@ -430,6 +437,10 @@ var DashBoardComponent = (function () {
         this.auth.get('/test', options)
             .map(function (res) { return res.json(); })
             .subscribe(function (data) { return _this.text = data; }, function (error) { return console.log(error); });
+    };
+    DashBoardComponent.prototype.getLastRegistered = function (hostelNum, dayCount) {
+        var _this = this;
+        this.http.getLastRegistered(hostelNum, dayCount).subscribe(function (reponse) { _this.lastRegistered = reponse; }, function (err) { return console.log(err); }, function () { return console.log(_this.lastRegistered); });
     };
     DashBoardComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -441,7 +452,7 @@ var DashBoardComponent = (function () {
     DashBoardComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
             selector: 'secure',
-            template: __webpack_require__(668),
+            template: __webpack_require__(669),
             providers: [__WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashBoard */]]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* Http */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashBoard */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__dashboard_service__["a" /* DashBoard */]) === 'function' && _b) || Object])
@@ -482,7 +493,7 @@ var FreeIpComponent = (function () {
     FreeIpComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_6" /* Component */])({
             selector: 'free-ip',
-            template: __webpack_require__(669),
+            template: __webpack_require__(670),
             providers: [__WEBPACK_IMPORTED_MODULE_0__freeIp_service__["a" /* FreeIpService */]]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__freeIp_service__["a" /* FreeIpService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__freeIp_service__["a" /* FreeIpService */]) === 'function' && _a) || Object])
@@ -526,7 +537,8 @@ var LoginComponent = (function () {
     LoginComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
             selector: 'login',
-            template: __webpack_require__(670)
+            template: __webpack_require__(671),
+            styles: [__webpack_require__(667)]
         }), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__LoginService__["a" /* LoginService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__LoginService__["a" /* LoginService */]) === 'function' && _a) || Object])
     ], LoginComponent);
@@ -563,32 +575,39 @@ module.exports = ""
 /***/ 667:
 /***/ (function(module, exports) {
 
-module.exports = "<form  *ngIf=\"auth.loggedIn()\">\n  <button (click)=\"logout()\">logout</button>\n</form>\n<div>\n  <nav *ngIf=\"auth.loggedIn()\">\n    <a routerLink=\"/test\">DashBoard</a>\n    <a routerLink=\"/about\">About</a>\n    <a routerLink=\"/free-ip\">freeip</a>\n  </nav>\n  <router-outlet></router-outlet>\n</div>\n"
+module.exports = ".row{\r\n  min-width: 500px;\r\n  position: absolute;\r\n  text-align: center;\r\n  top: 50%;\r\n  left: 50%;\r\n  -webkit-transform: translate(-50%, -50%);\r\n          transform: translate(-50%, -50%);\r\n  font-size: 2.5rem\r\n}\r\n@media (max-width: 500px) {\r\n  .myForm {\r\n    min-width: 90%;\r\n  }\r\n}\r\n"
 
 /***/ }),
 
 /***/ 668:
 /***/ (function(module, exports) {
 
-module.exports = "<div>Активных пользователей:{{activeClientCount}}</div>\r\n<div>\r\n  <table  class=\"table table-striped\">\r\n    <thead>\r\n    <tr>\r\n      <th>Имя</th>\r\n      <th>Колличество</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of countClient\">\r\n      <td>{{item.nameOfHostel}}  </td>\r\n      <td>{{item.countClient}} </td>\r\n    </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n"
+module.exports = "<form  *ngIf=\"auth.loggedIn()\">\n  <button (click)=\"logout()\">logout</button>\n</form>\n<div>\n  <nav *ngIf=\"auth.loggedIn()\">\n    <a routerLink=\"/test\">DashBoard</a>\n    <a routerLink=\"/about\">About</a>\n    <a routerLink=\"/free-ip\">freeip</a>\n  </nav>\n  <router-outlet></router-outlet>\n</div>\n"
 
 /***/ }),
 
 /***/ 669:
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n<table  class=\"table table-striped\">\r\n  <thead>\r\n  <tr>\r\n    <th>Имя</th>\r\n    <th>Диапазон</th>\r\n    <th>Колличество</th>\r\n  </tr>\r\n  </thead>\r\n  <tbody>\r\n  <tr *ngFor=\"let item of getData\">\r\n    <td>{{item.name}}  </td>\r\n    <td>{{item.ipange}}</td>\r\n    <td>{{item.count}} </td>\r\n  </tr>\r\n  </tbody>\r\n</table>\r\n</div>\r\n"
+module.exports = "<div>Активных пользователей:{{activeClientCount}}</div>\r\n<div>\r\n  <table  class=\"table table-striped\">\r\n    <thead>\r\n    <tr>\r\n      <th>Имя</th>\r\n      <th>Колличество</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of countClient\">\r\n      <td>{{item.nameOfHostel}}  </td>\r\n      <td>{{item.countClient}} </td>\r\n    </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n<div>\r\n  <div class=\"form-group col-xs-1\">\r\n    <label>Номер Общежития:</label>\r\n    <select class=\"form-control\"  name=\"dayCount\" [(ngModel)] = \"hosteNum\" >\r\n      <option *ngFor = \"let hostel of hostelsList\" [value] = \"hostel\">{{hostel}}</option>\r\n    </select>\r\n    <label>Колличество дней:</label>\r\n   <input class=\"form-control\" type=\"number\" name=\"dayCount\" [(ngModel)] = \"dayCount\" />\r\n    <br>\r\n    <button class=\"btn btn-default\" (click)=\"getLastRegistered(hosteNum,dayCount)\">Отправить</button>\r\n  </div>\r\n\r\n\r\n</div>\r\n<div>\r\n  <table  class=\"table table-striped\">\r\n    <thead>\r\n    <tr>\r\n      <th>Логин</th>\r\n      <th>Общежитие</th>\r\n      <th>MAC</th>\r\n      <th>Дата изменения</th>\r\n      <th>IP</th>\r\n    </tr>\r\n    </thead>\r\n    <tbody>\r\n    <tr *ngFor=\"let item of lastRegistered\">\r\n      <td>{{item.puser}}  </td>\r\n      <td>{{item.hostelName}} </td>\r\n      <td>{{item.mac}}  </td>\r\n      <td>{{item.date}} </td>\r\n      <td>{{item.ip}}  </td>\r\n    </tr>\r\n    </tbody>\r\n  </table>\r\n</div>\r\n"
 
 /***/ }),
 
 /***/ 670:
 /***/ (function(module, exports) {
 
-module.exports = "<form #f=\"ngForm\" (ngSubmit)=\"onLogin(f.value)\" *ngIf=\"!auth.loggedIn()\">\r\n  <input type=\"text\" placeholder=\"username\" name=\"username\" ngModel>\r\n  <input type=\"password\" placeholder=\"password\" name=\"password\" ngModel>\r\n  <button type=\"submit\">login</button>\r\n  <button (click)=\"logout()\">logout</button>\r\n  {{auth.loggedIn()}}\r\n</form>\r\n"
+module.exports = "<div>\r\n<table  class=\"table table-striped\">\r\n  <thead>\r\n  <tr>\r\n    <th>Имя</th>\r\n    <th>Диапазон</th>\r\n    <th>Колличество</th>\r\n  </tr>\r\n  </thead>\r\n  <tbody>\r\n  <tr *ngFor=\"let item of getData\">\r\n    <td>{{item.name}}  </td>\r\n    <td>{{item.ipange}}</td>\r\n    <td>{{item.count}} </td>\r\n  </tr>\r\n  </tbody>\r\n</table>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ 689:
+/***/ 671:
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm-10 col-sm-offset-1 hid\">\r\n      <div class=\"row\">\r\n        <div class=\"col-sm-10 col-sm-offset-3 text-center\">\r\n          <form class=\"form-group col-xs-10\" #f=\"ngForm\" (ngSubmit)=\"onLogin(f.value)\" *ngIf=\"!auth.loggedIn()\">\r\n            <input class=\"form-control\" type=\"text\" placeholder=\"username\" name=\"username\" ngModel> <br>\r\n            <input class=\"form-control\" type=\"password\" placeholder=\"password\" name=\"password\" ngModel> <br>\r\n            <button class=\"btn btn-primary btn-md btn-block\" type=\"submit\">login</button>\r\n            <!--  <button (click)=\"logout()\">logout</button> -->\r\n          </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n"
+
+/***/ }),
+
+/***/ 690:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(388);
@@ -596,5 +615,5 @@ module.exports = __webpack_require__(388);
 
 /***/ })
 
-},[689]);
+},[690]);
 //# sourceMappingURL=main.bundle.map

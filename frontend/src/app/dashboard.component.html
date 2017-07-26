@@ -15,3 +15,39 @@
     </tbody>
   </table>
 </div>
+<div>
+  <div class="form-group col-xs-1">
+    <label>Номер Общежития:</label>
+    <select class="form-control"  name="dayCount" [(ngModel)] = "hosteNum" >
+      <option *ngFor = "let hostel of hostelsList" [value] = "hostel">{{hostel}}</option>
+    </select>
+    <label>Колличество дней:</label>
+   <input class="form-control" type="number" name="dayCount" [(ngModel)] = "dayCount" />
+    <br>
+    <button class="btn btn-default" (click)="getLastRegistered(hosteNum,dayCount)">Отправить</button>
+  </div>
+
+
+</div>
+<div>
+  <table  class="table table-striped">
+    <thead>
+    <tr>
+      <th>Логин</th>
+      <th>Общежитие</th>
+      <th>MAC</th>
+      <th>Дата изменения</th>
+      <th>IP</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of lastRegistered">
+      <td>{{item.puser}}  </td>
+      <td>{{item.hostelName}} </td>
+      <td>{{item.mac}}  </td>
+      <td>{{item.date}} </td>
+      <td>{{item.ip}}  </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
