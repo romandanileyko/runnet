@@ -2,18 +2,23 @@ package ru.danileyko.Controller;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.danileyko.JDBC.ActiveClientDAO;
 import ru.danileyko.JDBC.ClientCountDAO;
 import ru.danileyko.JDBC.LastRegisteredDAO;
 import ru.danileyko.JDBC.ResultDao;
-import ru.danileyko.model.ActiveClient;
 import ru.danileyko.model.CountClientInEachHostel;
 import ru.danileyko.model.LastRegistered;
 import ru.danileyko.model.ResultCountOfFreeIp;
+import ru.danileyko.pdf.FreeIPPdfReport;
 
-import java.util.HashMap;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -68,6 +73,19 @@ public class ReportController {
         return count;
     }
 
+    @RequestMapping(value = "/free-ip-pdf",produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> freeIpPdfreport() throws IOException{
+        List<ResultCountOfFreeIp> freeIps = resultDao.getFreeIpCount();
+        ByteArrayInputStream byteArrayInputStream = FreeIPPdfReport.freeIpReport(freeIps);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Disposition", "inline; filename=free-ip-report.pdf");
+
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(byteArrayInputStream));
+    }
 }
 
 
