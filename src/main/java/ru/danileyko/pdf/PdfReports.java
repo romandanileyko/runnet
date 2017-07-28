@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by danil on 27.07.2017.
  */
-public class FreeIPPdfReport {
+public class PdfReports {
     public static ByteArrayInputStream freeIpReport(List<ResultCountOfFreeIp> freeIp){
         Document document = new Document();
         ByteArrayOutputStream out = new ByteArrayOutputStream();

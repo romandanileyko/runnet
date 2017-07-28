@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Http, RequestOptions} from "@angular/http";
 import {Headers} from '@angular/http'
 import {DashBoard} from "./dashboard.service";
-
+import {GoogleChartComponent} from "ng2-google-charts";
 /**
  * Created by danil on 17.07.2017.
  */
@@ -21,6 +21,19 @@ export class DashBoardComponent implements OnInit{
   lastRegistered: any;
   hosteNum: number;
   dayCount: number;
+
+  pieChartData = {
+    chartType: 'PieChart',
+    dataTable: [
+      ['Task', 'Hours per Day'],
+      ['Work',     11],
+      ['Eat',      2],
+      ['Commute',  2],
+      ['Watch TV', 2],
+      ['Sleep',    7]
+    ],
+    options: {'title': 'Tasks'},
+  };
 
   hostelsList = [1,2,3,5,6,7,10,11,12,13,14,15,16,17,19,20];
 
@@ -53,4 +66,5 @@ export class DashBoardComponent implements OnInit{
       err => console.log(err),
       () => console.log(this.activeClientCount)
   }
+
 }

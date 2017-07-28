@@ -8,14 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.danileyko.JDBC.ActiveClientDAO;
-import ru.danileyko.JDBC.ClientCountDAO;
-import ru.danileyko.JDBC.LastRegisteredDAO;
-import ru.danileyko.JDBC.ResultDao;
+import ru.danileyko.JDBC.*;
 import ru.danileyko.model.CountClientInEachHostel;
 import ru.danileyko.model.LastRegistered;
+import ru.danileyko.model.LogReport;
 import ru.danileyko.model.ResultCountOfFreeIp;
-import ru.danileyko.pdf.FreeIPPdfReport;
+import ru.danileyko.pdf.PdfReports;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,6 +33,8 @@ public class ReportController {
     private LastRegisteredDAO lastRegisteredDAO;
     @Autowired
     private ActiveClientDAO activeClientDAO;
+    @Autowired
+    private DhcpLogReportDAO dhcpLogReportDAO;
 
     @RequestMapping(value = "/free-ip")
     public @ResponseBody
@@ -73,10 +73,19 @@ public class ReportController {
         return count;
     }
 
+    @RequestMapping(value = "/dhcp-log-by-login")
+    public @ResponseBody String getDhcpLogByLogin(@RequestParam(value = "login") String login){
+        List<LogReport> logReportList = dhcpLogReportDAO.getDhcpLogByLogin(login);
+        Gson objGson = new Gson();
+        String json = objGson.toJson(logReportList);
+        System.out.println("LOG REPORT: "+ json);
+        return json;
+    }
+
     @RequestMapping(value = "/free-ip-pdf",produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> freeIpPdfreport() throws IOException{
         List<ResultCountOfFreeIp> freeIps = resultDao.getFreeIpCount();
-        ByteArrayInputStream byteArrayInputStream = FreeIPPdfReport.freeIpReport(freeIps);
+        ByteArrayInputStream byteArrayInputStream = PdfReports.freeIpReport(freeIps);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Disposition", "inline; filename=free-ip-report.pdf");

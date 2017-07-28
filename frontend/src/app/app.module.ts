@@ -13,13 +13,17 @@ import {AuthGuard} from "./AuthGuard";
 import {FreeIpComponent} from "./freeIp.component";
 import {FreeIpService} from "./freeIp.service";
 import {DashBoard} from "./dashboard.service";
+import {LogComponent} from "./log.component";
+import { GoogleChartComponent } from './google-chart/google-chart.component';
+import {Ng2GoogleChartsModule} from "ng2-google-charts";
 
 const appRoutes: Routes =[
   {path:'',component:LoginComponent},
   {path:'login',component:LoginComponent},
   {path:'test',component:DashBoardComponent,canActivate:[AuthGuard]},
   {path:'about',component:AboutComponent},
-  {path:'free-ip',component:FreeIpComponent}
+  {path:'free-ip',component:FreeIpComponent},
+  {path:'dhcp-log-by-login',component:LogComponent}
 ];
 
 @NgModule({
@@ -28,15 +32,18 @@ const appRoutes: Routes =[
     LoginComponent,
     DashBoardComponent,
     AboutComponent,
-    FreeIpComponent
+    FreeIpComponent,
+    LogComponent,
+    GoogleChartComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    Ng2GoogleChartsModule
   ],
-  providers: [LoginService,AuthGuard,FreeIpService,DashBoard],
+  providers: [LoginService,AuthGuard,FreeIpService,DashBoard,LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
