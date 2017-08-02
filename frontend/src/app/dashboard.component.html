@@ -1,4 +1,12 @@
 <div>Активных пользователей:{{activeClientCount}}</div>
+<div style="display: block; height: 500px; width: 500px;" *ngIf="isDataAvailable">
+  <canvas baseChart
+          [data]="dataChart"
+          [labels]="dataLables"
+          [chartType]="doughnutChartType"
+          (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"></canvas>
+</div>
 <div>
   <table  class="table table-striped">
     <thead>
@@ -49,7 +57,3 @@
     </tbody>
   </table>
 </div>
-<div>
-  <google-chart [data]="pieChartData"></google-chart>
-</div>
-

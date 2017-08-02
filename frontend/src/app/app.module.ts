@@ -14,8 +14,7 @@ import {FreeIpComponent} from "./freeIp.component";
 import {FreeIpService} from "./freeIp.service";
 import {DashBoard} from "./dashboard.service";
 import {LogComponent} from "./log.component";
-import { GoogleChartComponent } from './google-chart/google-chart.component';
-import {Ng2GoogleChartsModule} from "ng2-google-charts";
+import {ChartsModule} from "ng2-charts";
 
 const appRoutes: Routes =[
   {path:'',component:LoginComponent},
@@ -34,14 +33,13 @@ const appRoutes: Routes =[
     AboutComponent,
     FreeIpComponent,
     LogComponent,
-    GoogleChartComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(appRoutes),
-    Ng2GoogleChartsModule
+    ChartsModule
   ],
   providers: [LoginService,AuthGuard,FreeIpService,DashBoard,LoginService],
   bootstrap: [AppComponent]

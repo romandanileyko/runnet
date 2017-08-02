@@ -2,7 +2,10 @@ import {Component, OnInit} from "@angular/core";
 import {Http, RequestOptions} from "@angular/http";
 import {Headers} from '@angular/http'
 import {DashBoard} from "./dashboard.service";
-import {GoogleChartComponent} from "ng2-google-charts";
+import { Response} from '@angular/http';
+import {it} from "selenium-webdriver/testing";
+import {CountClient} from "./countClient";
+import {count} from "rxjs/operator/count";
 /**
  * Created by danil on 17.07.2017.
  */
@@ -14,26 +17,14 @@ import {GoogleChartComponent} from "ng2-google-charts";
 })
 
 export class DashBoardComponent implements OnInit{
-
   text: string;
   countClient: any;
   activeClientCount: any;
   lastRegistered: any;
-  hosteNum: number;
-  dayCount: number;
+  dataChart: number[] = [];
+  dataLables:string[] = [];
+  public isDataAvailable:boolean = false;
 
-  pieChartData = {
-    chartType: 'PieChart',
-    dataTable: [
-      ['Task', 'Hours per Day'],
-      ['Work',     11],
-      ['Eat',      2],
-      ['Commute',  2],
-      ['Watch TV', 2],
-      ['Sleep',    7]
-    ],
-    options: {'title': 'Tasks'},
-  };
 
   hostelsList = [1,2,3,5,6,7,10,11,12,13,14,15,16,17,19,20];
 
@@ -52,13 +43,32 @@ export class DashBoardComponent implements OnInit{
   }
 
   getLastRegistered(hostelNum,dayCount){
-    this.http.getLastRegistered(hostelNum,dayCount).subscribe(reponse => {this.lastRegistered = reponse},
+    this.http.getLastRegistered(hostelNum,dayCount).subscribe((reponse: Response) =>
+        {
+          this.lastRegistered = reponse;
+        },
         err => console.log(err),
         () => console.log(this.lastRegistered))
   }
 
   ngOnInit(){
-    this.http.getCountClient().subscribe(response => {this.countClient = response},
+    this.http.getCountClient().subscribe((response:Response) => {
+        this.countClient = response;
+
+        let data:number[]=[];
+        let lablel:string[]=[];
+
+        for(let item in response){
+          let coutClientObj = response[item];
+          //this.dataLables.push(coutClientObj['nameOfHostel']);
+          //this.dataChart.push(coutClientObj['countClient']);
+          lablel.push(coutClientObj['nameOfHostel']);
+          data.push(coutClientObj['countClient']);
+        }
+        this.dataChart = data;
+        this.dataLables = lablel;
+        this.isDataAvailable = true;
+      },
       err => console.log(err),
       () => console.log(this.countClient))
 
@@ -66,5 +76,9 @@ export class DashBoardComponent implements OnInit{
       err => console.log(err),
       () => console.log(this.activeClientCount)
   }
+
+  // public doughnutChartLabels:string[] = this.dataLables;
+  // public doughnutChartData:number[] = this.dataChart;
+  public doughnutChartType:string = 'doughnut';
 
 }
